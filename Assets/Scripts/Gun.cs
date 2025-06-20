@@ -30,12 +30,23 @@ public class Gun : MonoBehaviour {
 
     private float lastFireTime; // 총을 마지막으로 발사한 시점
 
-    private void Awake() {
+    private void Awake()
+    {
         // 사용할 컴포넌트의 참조 가져오기
+        gunAudioPlayer = GetComponent<AudioSource>();
+        bulletLineRenderer = GetComponent<LineRenderer>();
+
+        bulletLineRenderer.positionCount = 2;
+        bulletLineRenderer.enabled = false;
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         // 총 상태 초기화
+        ammoRemain = gunData.startAmmoRemain;
+        magAmmo = gunData.magCapacity;
+        state = State.Ready;
+        lastFireTime = 0;
     }
 
     // 발사 시도
