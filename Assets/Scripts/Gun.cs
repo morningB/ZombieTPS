@@ -35,7 +35,8 @@ public class Gun : MonoBehaviour {
         // 사용할 컴포넌트의 참조 가져오기
         gunAudioPlayer = GetComponent<AudioSource>();
         bulletLineRenderer = GetComponent<LineRenderer>();
-
+        // 점을 2개 사용
+        // 처음은 총구의 위치, 두번째는 탄알이 닿을 위치
         bulletLineRenderer.positionCount = 2;
         bulletLineRenderer.enabled = false;
     }
@@ -51,7 +52,11 @@ public class Gun : MonoBehaviour {
 
     // 발사 시도
     public void Fire() {
-
+        if (state == State.Ready && Time.time >= lastFireTime + gunData.timeBetFire)
+        {
+            lastFireTime = Time.time;
+            Shot();
+        }
     }
 
     // 실제 발사 처리
@@ -60,7 +65,15 @@ public class Gun : MonoBehaviour {
     }
 
     // 발사 이펙트와 소리를 재생하고 탄알 궤적을 그림
-    private IEnumerator ShotEffect(Vector3 hitPosition) {
+    private IEnumerator ShotEffect(Vector3 hitPosition)
+    {
+        muzzleFlashEffect.Play();
+        shellEjectEffect.Play();
+        gunAudioPlayer.PlayOneShot(gunData.shotClip);
+        // 시작과 끝 위치
+        bulletLineRenderer.SetPosition(0, fireTransform.position);
+        bulletLineRenderer.SetPosition(1, hitPosition);
+        
         // 라인 렌더러를 활성화하여 탄알 궤적을 그림
         bulletLineRenderer.enabled = true;
 
