@@ -2,9 +2,11 @@
 using UnityEngine;
 
 // 총을 구현한다
-public class Gun : MonoBehaviour {
+public class Gun : MonoBehaviour
+{
     // 총의 상태를 표현하는데 사용할 타입을 선언한다
-    public enum State {
+    public enum State
+    {
         Ready, // 발사 준비됨
         Empty, // 탄창이 빔
         Reloading // 재장전 중
@@ -22,15 +24,16 @@ public class Gun : MonoBehaviour {
     private AudioSource gunAudioPlayer; // 총 소리 재생기
 
     public GunData gunData; // 총의 현재 데이터
-    
+
     private float fireDistance = 50f; // 사정거리
 
     public int ammoRemain = 100; // 남은 전체 탄약
     public int magAmmo; // 현재 탄창에 남아있는 탄약
-    
+
     private float lastFireTime; // 총을 마지막으로 발사한 시점
-    
-    private void Awake() {
+
+    private void Awake()
+    {
         // 사용할 컴포넌트들의 참조를 가져오기
         gunAudioPlayer = GetComponent<AudioSource>();
         bulletLineRenderer = GetComponent<LineRenderer>();
@@ -41,7 +44,8 @@ public class Gun : MonoBehaviour {
         bulletLineRenderer.enabled = false;
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         // 전체 예비 탄약 양을 초기화
         ammoRemain = gunData.startAmmoRemain;
         // 현재 탄창을 가득채우기
@@ -54,7 +58,8 @@ public class Gun : MonoBehaviour {
     }
 
     // 발사 시도
-    public void Fire() {
+    public void Fire()
+    {
         // 현재 상태가 발사 가능한 상태
         // && 마지막 총 발사 시점에서 timeBetFire 이상의 시간이 지남
         if (state == State.Ready && Time.time >= lastFireTime + gunData.timeBetFire)
@@ -67,7 +72,8 @@ public class Gun : MonoBehaviour {
     }
 
     // 실제 발사 처리
-    private void Shot() {
+    private void Shot()
+    {
         // 레이캐스트에 의한 충돌 정보를 저장하는 컨테이너
         RaycastHit hit;
         // 총알이 맞은 곳을 저장할 변수
@@ -114,7 +120,8 @@ public class Gun : MonoBehaviour {
     }
 
     // 발사 이펙트와 소리를 재생하고 총알 궤적을 그린다
-    private IEnumerator ShotEffect(Vector3 hitPosition) {
+    private IEnumerator ShotEffect(Vector3 hitPosition)
+    {
         // 총구 화염 효과 재생
         muzzleFlashEffect.Play();
         // 탄피 배출 효과 재생
@@ -138,7 +145,8 @@ public class Gun : MonoBehaviour {
     }
 
     // 재장전 시도
-    public bool Reload() {
+    public bool Reload()
+    {
         if (state == State.Reloading ||
             ammoRemain <= 0 || magAmmo >= gunData.magCapacity)
         {
@@ -153,7 +161,8 @@ public class Gun : MonoBehaviour {
     }
 
     // 실제 재장전 처리를 진행
-    private IEnumerator ReloadRoutine() {
+    private IEnumerator ReloadRoutine()
+    {
         // 현재 상태를 재장전 중 상태로 전환
         state = State.Reloading;
         // 재장전 소리 재생
